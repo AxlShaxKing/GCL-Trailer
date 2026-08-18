@@ -1,0 +1,946 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* =========================================================
+     RADII
+  ========================================================= */
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  /* =========================================================
+     TYPOGRAPHY
+  ========================================================= */
+
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* =========================================================
+     SHADCN / UI TOKENS
+  ========================================================= */
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* =========================================================
+     GCL CAMPAIGN PALETTE
+
+     BLUE  → primary identity
+     YELLOW → energy / opportunity / CTA
+     RED    → selective emphasis
+  ========================================================= */
+
+  --color-night: var(--night);
+  --color-night-foreground: var(--night-foreground);
+
+  --color-sovereign: var(--sovereign);
+  --color-sky: var(--sky);
+
+  --color-yellow: var(--yellow);
+  --color-red: var(--red);
+
+  /* Compatibility aliases */
+  --color-gold: var(--yellow);
+  --color-ember: var(--red);
+
+  /* Supporting neutral */
+  --color-slate: var(--slate);
+}
+
+/* =========================================================
+   ROOT VARIABLES
+   ========================================================= */
+
+:root {
+  --radius: 0.375rem;
+
+  /* =======================================================
+     GCL PRIMARY BLUE
+     
+     The visual environment should be overwhelmingly blue.
+  ======================================================= */
+
+  --night: oklch(0.17 0.055 258);
+  --night-foreground: oklch(0.985 0.004 250);
+
+  --sovereign: oklch(0.31 0.115 258);
+  --sky: oklch(0.52 0.17 255);
+
+  /* =======================================================
+     GCL YELLOW
+     
+     Strong, youthful, energetic.
+     Used for:
+       - CTA
+       - important accents
+       - countdown highlights
+       - underline
+       - active states
+  ======================================================= */
+
+  --yellow: oklch(0.86 0.17 91);
+
+  /* =======================================================
+     GCL RED
+     
+     Intentionally restrained.
+     Used for:
+       - small campaign accents
+       - active indicators
+       - important moments
+       - selected details
+       
+     Do NOT use as a large background.
+  ======================================================= */
+
+  --red: oklch(0.57 0.21 28);
+
+  /* =======================================================
+     SUPPORTING NEUTRAL
+  ======================================================= */
+
+  --slate: oklch(0.46 0.035 258);
+
+  /* =======================================================
+     LIGHT UI SURFACE
+  ======================================================= */
+
+  --background: oklch(0.985 0.004 250);
+  --foreground: oklch(0.20 0.045 258);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.20 0.045 258);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.20 0.045 258);
+
+  /* =======================================================
+     SEMANTIC COLORS
+  ======================================================= */
+
+  --primary: var(--sovereign);
+  --primary-foreground: oklch(0.985 0.004 250);
+
+  --secondary: oklch(0.945 0.012 252);
+  --secondary-foreground: oklch(0.28 0.065 258);
+
+  --muted: oklch(0.945 0.012 252);
+  --muted-foreground: oklch(0.52 0.035 258);
+
+  /*
+   * Accent remains very light.
+   * Do not use yellow as the generic UI accent because
+   * yellow is reserved for campaign emphasis.
+   */
+  --accent: oklch(0.94 0.018 252);
+  --accent-foreground: oklch(0.28 0.065 258);
+
+  --destructive: var(--red);
+  --destructive-foreground: oklch(0.985 0.004 250);
+
+  --border: oklch(0.90 0.014 252);
+  --input: oklch(0.90 0.014 252);
+
+  --ring: var(--sky);
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--yellow);
+    color: var(--night);
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:focus-visible,
+  a:focus-visible {
+    outline: 2px solid var(--yellow);
+    outline-offset: 4px;
+  }
+}
+
+/* =========================================================
+   TYPOGRAPHY — REFINED
+   ========================================================= */
+
+/*
+ * Main campaign statement.
+ *
+ * Still bold and editorial, but no longer dominates
+ * the entire viewport.
+ */
+
+@utility display-hero {
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
+
+  /* Was: clamp(4.25rem, 11vw, 10.5rem) */
+  font-size: clamp(3rem, 7vw, 7rem);
+
+  max-width: 11ch;
+}
+
+/*
+ * Secondary headings.
+ */
+
+@utility display-section {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+
+  /* Was: clamp(2.4rem, 6.5vw, 5.5rem) */
+  font-size: clamp(2rem, 4.5vw, 4rem);
+
+  max-width: 14ch;
+}
+
+/*
+ * Technical labels.
+ */
+
+@utility label-technical {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/*
+ * Campaign eyebrow.
+ */
+
+@utility label-campaign {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   CAMPAIGN BUTTON — MORE COMPACT
+   ========================================================= */
+
+@utility btn-campaign {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+
+  min-height: 2.9rem;
+
+  padding: 0.8rem 1.5rem;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: var(--yellow);
+  color: var(--night);
+
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 28px
+      color-mix(
+        in oklab,
+        var(--yellow) 16%,
+        transparent
+      );
+
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    background-color 200ms ease;
+}
+
+.btn-campaign:hover {
+  transform: translateY(-2px);
+
+  background: oklch(0.89 0.17 91);
+
+  box-shadow:
+    0 12px 34px
+      color-mix(
+        in oklab,
+        var(--yellow) 24%,
+        transparent
+      );
+}
+
+
+/* =========================================================
+   GHOST BUTTON — MORE REFINED
+   ========================================================= */
+
+@utility btn-ghost-campaign {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  min-height: 2.75rem;
+
+  padding: 0.75rem 1.4rem;
+
+  border: 1px solid
+    color-mix(
+      in oklab,
+      var(--night-foreground) 20%,
+      transparent
+    );
+
+  border-radius: 999px;
+
+  background: transparent;
+  color: var(--night-foreground);
+
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+
+/* =========================================================
+   GRID — LESS VISUAL NOISE
+   ========================================================= */
+
+@utility grid-field {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(
+        in oklab,
+        var(--sky) 7%,
+        transparent
+      ) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(
+        in oklab,
+        var(--sky) 7%,
+        transparent
+      ) 1px,
+      transparent 1px
+    );
+
+  background-size: 72px 72px;
+
+  mask-image:
+    radial-gradient(
+      ellipse 70% 60% at 50% 45%,
+      black 0%,
+      rgba(0, 0, 0, 0.5) 45%,
+      transparent 100%
+    );
+
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse 70% 60% at 50% 45%,
+      black 0%,
+      rgba(0, 0, 0, 0.5) 45%,
+      transparent 100%
+    );
+}
+
+
+/* =========================================================
+   BLUE ATMOSPHERIC GLOW — MORE SUBTLE
+   ========================================================= */
+
+@utility sky-glow {
+  background:
+    radial-gradient(
+      ellipse 50% 42% at 50% 40%,
+      color-mix(
+        in oklab,
+        var(--sky) 28%,
+        transparent
+      ),
+      transparent 72%
+    );
+}
+
+
+/* =========================================================
+   MOBILE TYPOGRAPHY
+   ========================================================= */
+
+@media (max-width: 640px) {
+  .grid-field {
+    background-size: 52px 52px;
+  }
+
+  .display-hero {
+    font-size: clamp(2.75rem, 13vw, 4.5rem);
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+  }
+
+  .display-section {
+    font-size: clamp(1.85rem, 9vw, 3rem);
+    line-height: 0.95;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .display-hero {
+    font-size: clamp(3.25rem, 8vw, 5.5rem);
+  }
+
+  .display-section {
+    font-size: clamp(2.25rem, 5.5vw, 4rem);
+  }
+}
+
+/* =========================================================
+   BACKGROUND — GRID
+   ========================================================= */
+
+@utility grid-field {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(
+        in oklab,
+        var(--sky) 10%,
+        transparent
+      ) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(
+        in oklab,
+        var(--sky) 10%,
+        transparent
+      ) 1px,
+      transparent 1px
+    );
+
+  background-size: 80px 80px;
+
+  /*
+   * Keep the grid concentrated around the visual
+   * center instead of covering the entire page.
+   */
+
+  mask-image:
+    radial-gradient(
+      ellipse 75% 65% at 50% 45%,
+      black 0%,
+      rgba(0, 0, 0, 0.65) 45%,
+      transparent 100%
+    );
+
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse 75% 65% at 50% 45%,
+      black 0%,
+      rgba(0, 0, 0, 0.65) 45%,
+      transparent 100%
+    );
+}
+
+/* =========================================================
+   BLUE ATMOSPHERIC GLOW
+   ========================================================= */
+
+@utility sky-glow {
+  background:
+    radial-gradient(
+      ellipse 55% 48% at 50% 42%,
+      color-mix(
+        in oklab,
+        var(--sky) 38%,
+        transparent
+      ),
+      transparent 72%
+    );
+}
+
+/* =========================================================
+   SECONDARY BLUE GLOW
+   ========================================================= */
+
+@utility sovereign-glow {
+  background:
+    radial-gradient(
+      ellipse 70% 60% at 50% 55%,
+      color-mix(
+        in oklab,
+        var(--sovereign) 45%,
+        transparent
+      ),
+      transparent 75%
+    );
+}
+
+/* =========================================================
+   RED MICRO-ACCENT
+   ========================================================= */
+
+/*
+ * Red should be felt rather than dominate.
+ *
+ * This is useful for a tiny dot, indicator, or campaign
+ * detail.
+ */
+
+@utility red-indicator {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--red);
+
+  box-shadow:
+    0 0 0 4px
+      color-mix(
+        in oklab,
+        var(--red) 12%,
+        transparent
+      ),
+    0 0 18px
+      color-mix(
+        in oklab,
+        var(--red) 45%,
+        transparent
+      );
+}
+
+/* =========================================================
+   YELLOW UNDERLINE
+   ========================================================= */
+
+@utility yellow-underline {
+  position: relative;
+  color: var(--night-foreground);
+}
+
+.yellow-underline::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0.02em;
+  right: 0.02em;
+
+  bottom: 0.01em;
+
+  height: 0.055em;
+
+  background: var(--yellow);
+
+  box-shadow:
+    0 0 22px 3px
+      color-mix(
+        in oklab,
+        var(--yellow) 38%,
+        transparent
+      );
+}
+
+/*
+ * Keep the previous utility working.
+ */
+
+.gold-underline {
+  position: relative;
+  color: var(--night-foreground);
+}
+
+.gold-underline::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0.02em;
+  right: 0.02em;
+
+  bottom: 0.01em;
+
+  height: 0.055em;
+
+  background: var(--yellow);
+
+  box-shadow:
+    0 0 22px 3px
+      color-mix(
+        in oklab,
+        var(--yellow) 38%,
+        transparent
+      );
+}
+
+/* =========================================================
+   CAMPAIGN BUTTON
+   ========================================================= */
+
+/*
+ * Yellow is the primary CTA.
+ *
+ * Blue page + yellow CTA = strong brand hierarchy.
+ */
+
+@utility btn-campaign {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+
+  min-height: 3.25rem;
+
+  padding: 1rem 2rem;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: var(--yellow);
+  color: var(--night);
+
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 35px
+      color-mix(
+        in oklab,
+        var(--yellow) 18%,
+        transparent
+      );
+
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    background-color 220ms ease;
+}
+
+.btn-campaign:hover {
+  transform: translateY(-2px);
+
+  background: oklch(0.89 0.17 91);
+
+  box-shadow:
+    0 16px 44px
+      color-mix(
+        in oklab,
+        var(--yellow) 28%,
+        transparent
+      );
+}
+
+.btn-campaign:active {
+  transform: translateY(0);
+}
+
+.btn-campaign:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 5px;
+}
+
+/* =========================================================
+   GHOST BUTTON
+   ========================================================= */
+
+@utility btn-ghost-campaign {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+
+  min-height: 3rem;
+
+  padding: 0.9rem 1.8rem;
+
+  border: 1px solid
+    color-mix(
+      in oklab,
+      var(--night-foreground) 24%,
+      transparent
+    );
+
+  border-radius: 999px;
+
+  background: transparent;
+  color: var(--night-foreground);
+
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+.btn-ghost-campaign:hover {
+  border-color: var(--yellow);
+
+  background:
+    color-mix(
+      in oklab,
+      var(--yellow) 7%,
+      transparent
+    );
+}
+
+/* =========================================================
+   NETWORK
+   ========================================================= */
+
+/*
+ * Network is BLUE.
+ *
+ * Yellow is reserved for nodes.
+ * Red appears only occasionally.
+ */
+
+.network-line {
+  stroke: color-mix(
+    in oklab,
+    var(--sky) 55%,
+    transparent
+  );
+}
+
+.network-node {
+  background: var(--yellow);
+
+  box-shadow:
+    0 0 14px
+      color-mix(
+        in oklab,
+        var(--yellow) 65%,
+        transparent
+      );
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes gcl-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gcl-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes gcl-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes gcl-network {
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes gcl-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* =========================================================
+   MOTION UTILITIES
+   ========================================================= */
+
+@utility animate-rise {
+  animation:
+    gcl-rise
+    900ms
+    cubic-bezier(0.16, 0.84, 0.28, 1)
+    both;
+}
+
+@utility animate-fade {
+  animation:
+    gcl-fade
+    700ms
+    ease-out
+    both;
+}
+
+@utility animate-node {
+  animation:
+    gcl-pulse
+    3.4s
+    ease-in-out
+    infinite;
+}
+
+@utility animate-network-line {
+  animation:
+    gcl-network
+    5s
+    ease-in-out
+    infinite;
+}
+
+@utility animate-glow {
+  animation:
+    gcl-glow
+    4s
+    ease-in-out
+    infinite;
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+  .grid-field {
+    background-size: 56px 56px;
+  }
+}
